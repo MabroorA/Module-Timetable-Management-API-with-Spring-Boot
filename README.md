@@ -1,1 +1,1 @@
-#System to organise and manage modules' timetables
+# System to organise and manage modules' timetables
