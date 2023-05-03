@@ -4,24 +4,83 @@ info:
   version: '1.0.0'
 servers:
   - url: https://api.server.test/v1
+
+tags:
+- name: Convenors
+  description: All our hotels
+- name: Modules
+  description: All The Modules
+    
 paths:
   /convenors:
+    
     get:
+      tags:
+      - Convenors
+      summary: List all convenor
       responses:
         '200':
           description: OK
+    
     post:
+      tags:
+      - Convenors
+      summary: Create a new Convenors
       responses:
         '201':
           description: OK
     
     put:
+      tags:
+      - Convenors
+      summary: Update a Convenor
       responses:
         '200':
           description: OK
 
-    #delete a specific convenor
+    # Delete a specific convenor
     delete:
+      tags:
+      - Convenors
+      summary: Delete a Convenor
+      responses:
+        '200':
+          description: OK
+  /convenors/{id}/modules:
+      
+    # List all modules
+      get:
+        tags:
+        - Convenors
+        summary: All modules taught by a convenor
+        responses:
+          '200':
+            description: OK
+
+  #Modules
+
+  /modules:
+    post:
+      tags:
+      - Modules
+      summary: List all modules
+      responses:
+        '201':
+          description: OK
+  
+    put:
+      tags:
+      - Modules
+      summary: Create a module
+      responses:
+        '200':
+          description: OK
+
+    # Delete a specific convenor
+    delete:
+      tags:
+      - Modules
+      summary: Delete a module
       responses:
         '200':
           description: OK
