@@ -7,10 +7,11 @@ servers:
 
 tags:
 - name: Convenors
-  description: All our hotels
+  description: All our Hotels
 - name: Modules
   description: All The Modules
-    
+- name: Sessions
+  description: All The Sessions
 paths:
   /convenors:
     
@@ -57,30 +58,98 @@ paths:
           '200':
             description: OK
 
-  #Modules
-
+# All Modules
   /modules:
-    post:
+    get:
       tags:
       - Modules
       summary: List all modules
       responses:
         '201':
           description: OK
-  
-    put:
+# Specific modules
+  /modules{code}:
+    post:
       tags:
       - Modules
-      summary: Create a module
+      summary: Create a specific module
+      responses:
+        '200':
+          description: OK
+    get:
+      tags:
+      - Modules
+      summary: List a specific module
+      responses:
+        '201':
+          description: OK
+  
+    
+    # Delete a module 
+    delete:
+      tags:
+      - Modules
+      summary: Delete a specific module
       responses:
         '200':
           description: OK
 
-    # Delete a specific convenor
+  /modules/{code}/sessions/{id}:
+
+    post:
+      tags:
+      - Sessions
+      summary: Create a specific .....
+      responses:
+        '200':
+          description: OK
+    get:
+      tags:
+      - Sessions
+      summary: Get a specific sessions by module
+      responses:
+        '200':
+          description: OK
+
+    # put and patch for update
+    put:
+      tags:
+      - Sessions
+      summary: Update a specific .....
+      responses:
+        '200':
+          description: OK
+    patch:
+      tags:
+      - Sessions
+      summary: Update a specific .....
+      responses:
+        '200':
+          description: OK
     delete:
       tags:
-      - Modules
-      summary: Delete a module
+      - Sessions
+      summary: Create a specific .....
+      responses:
+        '200':
+          description: OK
+  # SESSIONS
+  /sessions:
+    delete:
+      tags:
+      - Sessions
+      summary: Get sessions by convenor and module 
+      responses:
+        '200':
+          description: OK
+  
+  # Sessions filter by module and conveor
+  #It should be possible to use only one filter or both together
+  /sessions{convenor}{code}:
+    delete:
+      tags:
+      - Sessions
+      summary: delete all sessions
       responses:
         '200':
           description: OK
