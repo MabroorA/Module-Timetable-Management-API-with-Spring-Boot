@@ -6,6 +6,7 @@ import edu.leicester.co2103.domain.Convenor;
 import edu.leicester.co2103.domain.Module;
 import edu.leicester.co2103.domain.Session;
 import edu.leicester.co2103.repo.ModuleRepository;
+import edu.leicester.co2103.repo.SessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,23 +15,26 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class ModuleRestController {
     @Autowired
     ModuleRepository repo;
+
     /*
     Retrieve all modules (endpoint #7)
      */
     @GetMapping("/modules")
-    public ResponseEntity<List<Module>> listAllModules(){
+    public ResponseEntity<List<Module>> listAllModules() {
         List<Module> modules = repo.findAll();
         if (modules.isEmpty()) {
             return new ResponseEntity<List<Module>>(HttpStatus.NO_CONTENT);
 
-        }else
-            return new ResponseEntity<List<Module>>(modules,HttpStatus.OK);
+        } else
+            return new ResponseEntity<List<Module>>(modules, HttpStatus.OK);
     }
+
     /*
     Creating a Module
      */
@@ -47,6 +51,7 @@ public class ModuleRestController {
         headers.setLocation(ucBuilder.path("/modules/{code}").buildAndExpand(module.getCode()).toUri());
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
+
     /*
     Getting a specific module
      */
@@ -60,6 +65,7 @@ public class ModuleRestController {
             return new ResponseEntity<ErrorInfo>(new ErrorInfo("Module with code " + code + " not found"),
                     HttpStatus.NOT_FOUND);
     }
+
     /*
     Updating a module
      */
@@ -82,6 +88,7 @@ public class ModuleRestController {
             return new ResponseEntity<ErrorInfo>(new ErrorInfo("Module with code " + code + " not found."),
                     HttpStatus.NOT_FOUND);
     }
+
     /*
     Partially updating a module and the module is not fully replaced
      */
@@ -124,6 +131,7 @@ public class ModuleRestController {
             return new ResponseEntity<ErrorInfo>(new ErrorInfo("Module with code " + code + " not found."), HttpStatus.NOT_FOUND);
         }
     }
+
     /*
     Deleting a module (endpoint 11)
      */
@@ -138,9 +146,9 @@ public class ModuleRestController {
                     HttpStatus.NOT_FOUND);
 
     }
+
     /*
      list all sessions in a module (endpoint #12)
-
      */
     @GetMapping("/modules/{code}/sessions")
     public ResponseEntity<?> getsessionsbymodule(@PathVariable("code") String code) {
@@ -152,5 +160,109 @@ public class ModuleRestController {
         } else
             return new ResponseEntity<ErrorInfo>(new ErrorInfo("Module with code " + code + " not found"),
                     HttpStatus.NOT_FOUND);
+    }
+
+
+    /*
+    Creating a Session for a Specific  Module
+     */
+    @PostMapping("/modules/{code}/sessions")
+    public ResponseEntity<?> createSessionbymodule(@PathVariable("code") String code, @RequestBody Session session) {
+        Optional<Module> optionalModule = repo.findById(code);
+        if (optionalModule.isPresent()) {
+            Module module = optionalModule.get();
+            List<Session> sessions = module.getSessions();
+            sessions.add(session);
+            module.setSessions(sessions);
+
+            repo.save(module);
+            return new ResponseEntity<Session>(session, HttpStatus.CREATED);
+        } else {
+
+            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    /*
+    Get a Specific session from a  specific module
+     */
+    @GetMapping("/modules/{code}/sessions/{id}")
+    public ResponseEntity<?> getSessionbymodule(@PathVariable("code") String code, @PathVariable("id") long id) {
+
+        if (repo.findById(code).isPresent()) {
+            Module module = repo.findById(code).get();
+            List<Session> sessions = module.getSessions();
+            Session session = sessions.stream().filter(s -> s.getId() == id).findFirst().orElse(null);
+            if (session != null) {
+                return new ResponseEntity<Session>(session, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<ErrorInfo>(new ErrorInfo("Session with id " + id + " not found in module " + code),
+                        HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity<ErrorInfo>(new ErrorInfo("Module with code " + code + " not found"),
+                    HttpStatus.NOT_FOUND);
+        }
+    }
+
+    /*
+    Updating a session (by replacing)
+     */
+    @PutMapping("/modules/{code}/sessions/{id}")
+    public ResponseEntity<?> updateSessionByModule(@PathVariable("code") String code, @PathVariable("id") long id, @RequestBody Session newSession) {
+        Optional<Module> moduleOptional = repo.findById(code);
+        if (moduleOptional.isPresent()) {
+            Module module = moduleOptional.get();
+            Optional<Session> sessionOptional = module.getSessions().stream().filter(s -> s.getId() == id).findFirst();
+            if (sessionOptional.isPresent()) {
+                Session currentSession = sessionOptional.get();
+                currentSession.setTopic(newSession.getTopic());
+                currentSession.setDatetime(newSession.getDatetime());
+                currentSession.setDuration(newSession.getDuration());
+                repo.save(module);
+                return new ResponseEntity<>(currentSession, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new ErrorInfo("Session with id " + id + " not found in module " + code),
+                        HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity<>(new ErrorInfo("Module with code " + code + " not found"),
+                    HttpStatus.NOT_FOUND);
+        }
+    }
+
+    /*
+    Updating using patch(partially replacing)
+     */
+
+    /*
+    Deleting a specific session from a specific module
+     */
+    /*
+    session repo needed for deletingbyid
+     */
+    @Autowired
+    SessionRepository sessionrepo;
+    @DeleteMapping("/modules/{code}/sessions{id}")
+    public ResponseEntity<?> deleteSessionbymodule(@PathVariable("code") String code, @PathVariable("id") long id) {
+
+        if (repo.findById(code).isPresent()) {
+            Module module = repo.findById(code).get();
+            List<Session> sessions = module.getSessions();
+            Session session = sessions.stream().filter(s -> s.getId() == id).findFirst().orElse(null);
+            if (session != null) {
+                module.getSessions().remove(session);
+                sessionrepo.deleteById(id);
+                return new ResponseEntity<>(new ErrorInfo("session deleted"), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<ErrorInfo>(new ErrorInfo("Session with id " + id + " not found."),
+                        HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity<ErrorInfo>(new ErrorInfo("Module with code " + code + " not found."),
+                    HttpStatus.NOT_FOUND);
+
+        }
+
     }
 }
