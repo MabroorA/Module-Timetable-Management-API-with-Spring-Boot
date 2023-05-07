@@ -3,6 +3,7 @@ package edu.leicester.co2103.controller;
 
 import edu.leicester.co2103.ErrorInfo;
 import edu.leicester.co2103.domain.Convenor;
+import edu.leicester.co2103.domain.Module;
 import edu.leicester.co2103.repo.ConvenorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -96,15 +97,16 @@ public class ConvenorRestController {
     List all modules taught by a convenor
     endpoint #6)
      */
-//    @GetMapping("/convenors/{id}/modules")
-//    public ResponseEntity<?> getConvenor(@PathVariable("id") long id) {
-//
-//        if (repo.findById(id).isPresent()) {
-//            Convenor convenor = repo.findById(id).get();
-//            return new ResponseEntity<Convenor>(convenor, HttpStatus.OK);
-//        } else
-//            return new ResponseEntity<ErrorInfo>(new ErrorInfo("Convenor with id " + id + " not found"),
-//                    HttpStatus.NOT_FOUND);
-//    }
+    @GetMapping("/convenors/{id}/modules")
+    public ResponseEntity<?> getConvenors(@PathVariable("id") long id) {
+
+        if (repo.findById(id).isPresent()) {
+            Convenor convenor = repo.findById(id).get();
+            List<Module> modules = convenor.getModules();
+            return new ResponseEntity<List<Module>>(modules, HttpStatus.OK);
+        } else
+            return new ResponseEntity<ErrorInfo>(new ErrorInfo("Convenor with id " + id + " not found"),
+                    HttpStatus.NOT_FOUND);
+    }
 
 }
