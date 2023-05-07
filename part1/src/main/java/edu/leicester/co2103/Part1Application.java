@@ -2,6 +2,8 @@ package edu.leicester.co2103;
 
 import java.sql.Timestamp;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -17,6 +19,7 @@ import edu.leicester.co2103.repo.ModuleRepository;
 import edu.leicester.co2103.repo.SessionRepository;
 
 @SpringBootApplication
+@OpenAPIDefinition(info = @Info(title = "Part 1", version = "1.0.0"))
 public class Part1Application  implements ApplicationRunner {
 
 	@Autowired

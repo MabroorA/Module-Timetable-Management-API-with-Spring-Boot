@@ -1,6 +1,177 @@
 openapi: 3.0.1
 
 info:
-  title: part1 
-
+  title: part1,
+  "version": "1.0.0"
 # Placeholder file, replace this content with your Open API 3 spec
+servers:
+  - url: http://localhost:8080/
+    description: Localhost server
+tags:
+  - name: Convenors
+    description: All our Hotels
+  - name: Modules
+    description: All The Modules
+  - name: Sessions
+    description: All The Sessions
+paths:
+  /convenors:
+
+    get:
+      tags:
+        - Convenors
+      summary: List all convenors
+      responses:
+        '200':
+          description: OK
+
+    post:
+      tags:
+        - Convenors
+      summary: Create a new Convenor
+      responses:
+        '201':
+          description: OK
+
+    put:
+      tags:
+        - Convenors
+      summary: Update a Convenor
+      responses:
+        '200':
+          description: OK
+
+    # Delete a specific convenor
+    delete:
+      tags:
+        - Convenors
+      summary: Delete a Convenor
+      responses:
+        '200':
+          description: OK
+#  /convenors/{id}/modules:
+#
+#    # List all modules
+#    get:
+#      tags:
+#        - Convenors
+#      summary: All modules taught by a convenor
+#      responses:
+#        '200':
+#          description: OK
+#
+#  # All Modules
+#  /modules:
+#    get:
+#      tags:
+#        - Modules
+#      summary: List all modules
+#      responses:
+#        '201':
+#          description: OK
+#  # Specific modules
+#  /modules{code}:
+#    post:
+#      tags:
+#        - Modules
+#      summary: Create a specific module
+#      responses:
+#        '200':
+#          description: OK
+#    get:
+#      tags:
+#        - Modules
+#      summary: List a specific module
+#      responses:
+#        '201':
+#          description: OK
+#
+#
+#    # Delete a module
+#    delete:
+#      tags:
+#        - Modules
+#      summary: Delete a specific module
+#      responses:
+#        '200':
+#          description: OK
+#
+#  /modules/{code}/sessions/{id}:
+#
+#    post:
+#      tags:
+#        - Sessions
+#      summary: Create a specific .....
+#      responses:
+#        '200':
+#          description: OK
+#    get:
+#      tags:
+#        - Sessions
+#      summary: Get a specific sessions by module
+#      responses:
+#        '200':
+#          description: OK
+#
+#    # put and patch for update
+#    put:
+#      tags:
+#        - Sessions
+#      summary: Update a specific .....
+#      responses:
+#        '200':
+#          description: OK
+#    patch:
+#      tags:
+#        - Sessions
+#      summary: Update a specific .....
+#      responses:
+#        '200':
+#          description: OK
+#    delete:
+#      tags:
+#        - Sessions
+#      summary: Create a specific .....
+#      responses:
+#        '200':
+#          description: OK
+#  # SESSIONS
+#  /sessions:
+#    delete:
+#      tags:
+#        - Sessions
+#      summary: Get sessions by convenor and module
+#      responses:
+#        '200':
+#          description: OK
+#
+#  # Sessions filter by module and conveor
+#  #It should be possible to use only one filter or both together
+#  /sessions{convenor}{code}:
+#    delete:
+#      tags:
+#        - Sessions
+#      summary: delete all sessions
+#      responses:
+#        '200':
+#          description: OK
+#components:
+#  schemas:
+#    Convenor: #The schema for a Convenor
+#      type: object
+#      properties:
+#        id:
+#          type: integer
+#          format: int64
+#        name:
+#          type: string
+#        position:
+#          type: string
+#        modules:
+#          type: array
+#          items:
+#            $ref: "#/components/schemas/Module"
+#    Module:
+#      type: object
+#      properties:
+#

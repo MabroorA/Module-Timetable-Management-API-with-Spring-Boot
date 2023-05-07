@@ -1,5 +1,6 @@
 package edu.leicester.co2103.domain;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +36,9 @@ public class Convenor {
 		this.position = position;
 		this.modules = modules;
 	}
+	// Default constructor
+	public Convenor(){}
+
 
 	public long getId() {
 		return id;
@@ -67,5 +71,8 @@ public class Convenor {
 	public void setModules(List<Module> modules) {
 		this.modules = modules;
 	}
-
+	@Override
+	public String toString() {
+		return "Convenor [id=" + id + ", name=" + name +", position=" + position+ "]";
+	}
 }
