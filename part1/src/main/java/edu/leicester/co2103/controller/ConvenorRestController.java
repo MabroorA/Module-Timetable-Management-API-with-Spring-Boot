@@ -47,7 +47,7 @@ public class ConvenorRestController {
     /*
         Updating a Convenor
      */
-    @PutMapping("/convenors")
+    @PutMapping("/convenors/{id}")
     public ResponseEntity<?> updateConvenor(@PathVariable("id") long id, @RequestBody Convenor newConvenor) {
         if (repo.findById(id).isPresent()) {
             Convenor currentConvenor = repo.findById(id).get();
@@ -79,9 +79,9 @@ public class ConvenorRestController {
                     HttpStatus.NOT_FOUND);
     }
     /*
-    Delete a certain convenor
+    Delete a Specific convenor
      */
-    @DeleteMapping("/Convenor/{id}")
+    @DeleteMapping("/convenors/{id}")
     public ResponseEntity<?> deleteConvenor(@PathVariable("id") long id) {
 
         if (repo.findById(id).isPresent()) {

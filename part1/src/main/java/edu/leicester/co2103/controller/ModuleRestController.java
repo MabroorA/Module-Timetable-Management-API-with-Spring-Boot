@@ -30,7 +30,7 @@ public class ModuleRestController {
             return new ResponseEntity<List<Module>>(HttpStatus.NO_CONTENT);
 
         }else
-            return new ResponseEntity<List<Module>>(HttpStatus.OK);
+            return new ResponseEntity<List<Module>>(modules,HttpStatus.OK);
     }
     /*
     Post for a Module

@@ -22,7 +22,7 @@ public class Convenor {
 	private String name;
 	private Position position;
 
-	@ManyToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.REMOVE,  fetch = FetchType.EAGER)
 	@JoinColumn
 	private List<Module> modules;
 
