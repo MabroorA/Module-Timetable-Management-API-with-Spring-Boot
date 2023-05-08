@@ -1,12 +1,15 @@
 openapi: 3.0.1
 
 info:
-  title: part1,
-  "version": "1.0.0"
-# Placeholder file, replace this content with your Open API 3 spec
+  title: part1
+  version: "1.0.0"
+
+# Define server information
 servers:
   - url: http://localhost:8080/
     description: Localhost server
+
+# Define tags to categorize the endpoints
 tags:
   - name: Convenors
     description: All our Hotels
@@ -14,164 +17,471 @@ tags:
     description: All The Modules
   - name: Sessions
     description: All The Sessions
-paths:
-  /convenors:
 
+
+paths:
+
+  # Convenors
+
+  /convenors:
     get:
       tags:
         - Convenors
       summary: List all convenors
       responses:
         '200':
-          description: OK
+          description: List of all convenors
+        '400':
+          description: Error getting convenors
 
+  /convenors/{id}:
     post:
       tags:
         - Convenors
       summary: Create a new Convenor
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the Convenor to create
+          schema:
+            type: integer
+      requestBody: # Use requestBody to send data in the request body
+        required: true
+
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Convenor" # Reference the Convenor schema
       responses:
         '201':
-          description: OK
+          description: Convenor created
+        '400':
+          description: Convenor not created
+
+    get:
+      tags:
+        - Convenors
+      summary: List a Convenor
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the Convenor to list
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Convenor fetched
+        '400':
+          description: Convenor not fetched
 
     put:
       tags:
         - Convenors
       summary: Update a Convenor
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the Convenor to Convenor
+          schema:
+            type: integer
+      requestBody: # Use requestBody to send data in the request body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Convenor" # Reference the Convenor schema
       responses:
         '200':
-          description: OK
+          description: Convenor updated
+        '400':
+          description: Convenor not updated
 
-    # Delete a specific convenor
     delete:
       tags:
         - Convenors
       summary: Delete a Convenor
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the Convenor to delete
+          schema:
+            type: integer
       responses:
         '200':
-          description: OK
-#  /convenors/{id}/modules:
-#
-#    # List all modules
-#    get:
-#      tags:
-#        - Convenors
-#      summary: All modules taught by a convenor
-#      responses:
-#        '200':
-#          description: OK
-#
-#  # All Modules
-#  /modules:
-#    get:
-#      tags:
-#        - Modules
-#      summary: List all modules
-#      responses:
-#        '201':
-#          description: OK
-#  # Specific modules
-#  /modules{code}:
-#    post:
-#      tags:
-#        - Modules
-#      summary: Create a specific module
-#      responses:
-#        '200':
-#          description: OK
-#    get:
-#      tags:
-#        - Modules
-#      summary: List a specific module
-#      responses:
-#        '201':
-#          description: OK
-#
-#
-#    # Delete a module
-#    delete:
-#      tags:
-#        - Modules
-#      summary: Delete a specific module
-#      responses:
-#        '200':
-#          description: OK
-#
-#  /modules/{code}/sessions/{id}:
-#
-#    post:
-#      tags:
-#        - Sessions
-#      summary: Create a specific .....
-#      responses:
-#        '200':
-#          description: OK
-#    get:
-#      tags:
-#        - Sessions
-#      summary: Get a specific sessions by module
-#      responses:
-#        '200':
-#          description: OK
-#
-#    # put and patch for update
-#    put:
-#      tags:
-#        - Sessions
-#      summary: Update a specific .....
-#      responses:
-#        '200':
-#          description: OK
-#    patch:
-#      tags:
-#        - Sessions
-#      summary: Update a specific .....
-#      responses:
-#        '200':
-#          description: OK
-#    delete:
-#      tags:
-#        - Sessions
-#      summary: Create a specific .....
-#      responses:
-#        '200':
-#          description: OK
-#  # SESSIONS
-#  /sessions:
-#    delete:
-#      tags:
-#        - Sessions
-#      summary: Get sessions by convenor and module
-#      responses:
-#        '200':
-#          description: OK
-#
-#  # Sessions filter by module and conveor
-#  #It should be possible to use only one filter or both together
-#  /sessions{convenor}{code}:
-#    delete:
-#      tags:
-#        - Sessions
-#      summary: delete all sessions
-#      responses:
-#        '200':
-#          description: OK
-#components:
-#  schemas:
-#    Convenor: #The schema for a Convenor
-#      type: object
-#      properties:
-#        id:
-#          type: integer
-#          format: int64
-#        name:
-#          type: string
-#        position:
-#          type: string
-#        modules:
-#          type: array
-#          items:
-#            $ref: "#/components/schemas/Module"
-#    Module:
-#      type: object
-#      properties:
-#
+          description: Convenor Deleted
+        '400':
+          description: Convenor not Deleted
+  #(endpoint #6)
+  /convenors/{id}/modules:
+    get:
+      tags:
+        - Convenors
+      summary: List all modules taught by a convenor
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the Convenor to list
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: modules fetched
+        '400':
+          description: modules not fetched
+
+
+  # Modules
+
+  /modules:
+    get:
+      tags:
+        - Modules
+      summary: List all modules
+      responses:
+        '200':
+          description: modules fetched
+        '400':
+          description: modules not fetched
+
+  /modules/{code}:
+    post:
+      tags:
+        - Modules
+      summary: Create a  Module
+      parameters:
+        - name: code
+          in: path
+          required: true
+          description: The code of the Module to create
+          schema:
+            type: string
+      requestBody: # Use requestBody to send data in the request body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Convenor" # Reference the Module schema
+      responses:
+        '201':
+          description: Module Created
+        '400':
+          description: Module not Created
+
+    get:
+      tags:
+        - Modules
+      summary: List a  Module
+      parameters:
+        - name: code
+          in: path
+          required: true
+          description: The code of the Module to list
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Module fetched
+        '400':
+          description: Module not fetched
+
+    patch:
+      tags:
+        - Modules
+      summary: Update a  Module
+      parameters:
+        - name: code
+          in: path
+          required: true
+          description: The code of the Module to update
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Modules fetched
+        '400':
+          description: Modules not fetched
+
+    delete:
+      tags:
+        - Modules
+      summary: delete a  Module
+      parameters:
+        - name: code
+          in: path
+          required: true
+          description: The code of the Module to delete
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Module delete
+        '400':
+          description: Module not delete
+
+  /modules/{code}/sessions:
+    # endpoint #12
+    get:
+      tags:
+        - Modules
+      summary: List all sessions in a module
+      parameters:
+        - name: code
+          in: path
+          required: true
+          description: The code of the Module which has sessions
+          schema:
+            type: string
+      responses:
+        '200':
+          description: sessions fetched
+        '400':
+          description: Sessions not fetched
+    # Create a session in a module
+    # endpoint #13
+    post:
+      tags:
+        - Modules
+      summary: Create a session in a module
+      parameters:
+        - name: code
+          in: path
+          required: true
+          description: The Module code of session being created
+          schema:
+            type: string
+      requestBody: # Use requestBody to send data in the request body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Session" # Reference the Session schema
+      responses:
+        '201':
+          description: Session Created
+        '400':
+          description: Session not Created
+
+  /modules/{code}/sessions/{id}:
+    # endpoint #14
+    get:
+      tags:
+        - Modules
+      summary: Get a session in a module
+      parameters:
+        - name: code
+          in: path
+          required: true
+          description: The code of the module
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: The ID of the session
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Session fetched .
+        '400':
+          description: Session Not fetched
+
+    put:
+      tags:
+        - Modules
+      summary: Update a session in a module
+      parameters:
+        - name: code
+          in: path
+          required: true
+          description: Module code of session
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: The ID of the session being updated
+          schema:
+            type: string
+      requestBody: # Use requestBody to send data in the request body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Module" # Reference the Convenor schema
+      responses:
+        '200':
+          description: sessions updated
+        '400':
+          description: Sessions not updated
+
+    patch:
+      tags:
+        - Modules
+      summary: Update a session in a module
+      parameters:
+        - name: code
+          in: path
+          required: true
+          description: Module code of session
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: The ID of the session being updated
+          schema:
+            type: string
+      requestBody: # Use requestBody to send data in the request body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Session" # Reference the Convenor schema
+      responses:
+        '200':
+          description: sessions updated
+        '400':
+          description: Sessions not updated
+
+    delete:
+      tags:
+        - Modules
+      summary: delete a session in a Module
+      parameters:
+        - name: code
+          in: path
+          required: true
+          description: The code of the module
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: The ID of the session being deleted
+          schema:
+            type: string
+      responses:
+        '202':
+          description: session deleted
+        '400':
+          description: session not deleted
+
+          # endpoint #17 ^
+
+
+
+
+
+
+  /sessions:
+
+    delete:
+      tags:
+        - Sessions
+      summary: Delete All sessions
+      responses:
+        '202':
+          description: All Sessions deleted
+        '400':
+          description: Sessions not deleted
+
+    #Checkpoint 19
+    get:
+      tags:
+        - Sessions
+      summary: List all sessions, allowing filtering by convenor and/or module
+      parameters:
+        - name: convenor
+          in: query
+          required: false
+          description: The ID of the convenor to filter by
+          schema:
+            type: string
+        - name: module
+          in: query
+          required: false
+          description: The code of the module to filter by
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK. Sessions fetched successfully.
+        '400':
+          description: Bad Request. The request could not be understood or was missing required parameters.
+
+  /sessions/convenors/{id}/modules/{code}:
+    #Checkpoint 20
+    get:
+      tags:
+        - Sessions
+      summary: List all sessions by module and/or convenor
+      parameters:
+        - name: code
+          in: path
+          required: true
+          description: The code of the module to filter by
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: The ID of the convenor to filter by
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK. Sessions fetched successfully.
+        '400':
+          description: Bad Request. The request could not be understood or was missing required parameters.
+
+components:
+  schemas:
+    Convenor: #The schema for a Convenor
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        position:
+          type: string
+        modules:
+          type: array
+          items:
+            $ref: "#/components/schemas/Module"
+
+    Module: #The schema for a Module
+      type: object
+      properties:
+        code:
+          type: string
+        title:
+          type: string
+        level:
+          type: integer
+        optional:
+          type: boolean
+        sessions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Session"
+
+    Session: #The schema for a Session
+      type: object
+      properties:
+        id:
+          type: integer
+        topic:
+          type: string
+        datetime:
+          type: string
+        duration:
+          type: integer
+
+
