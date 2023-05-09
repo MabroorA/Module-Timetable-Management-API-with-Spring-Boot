@@ -13,6 +13,6 @@ import java.util.List;
 @Repository
 public interface ModuleRepository extends CrudRepository<Module, String> {
     public List<Module> findAll();
-
+    public void deleteModuleByCode(String code);
 
 }

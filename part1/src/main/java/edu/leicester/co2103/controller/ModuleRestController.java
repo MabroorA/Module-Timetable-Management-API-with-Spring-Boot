@@ -139,7 +139,7 @@ public class ModuleRestController {
     public ResponseEntity<?> deleteConvenor(@PathVariable("code") String code) {
 
         if (repo.findById(code).isPresent()) {
-            repo.deleteById(code);
+            repo.deleteModuleByCode(code);
             return ResponseEntity.ok(null);
         } else
             return new ResponseEntity<ErrorInfo>(new ErrorInfo("Module with code " + code + " not found."),

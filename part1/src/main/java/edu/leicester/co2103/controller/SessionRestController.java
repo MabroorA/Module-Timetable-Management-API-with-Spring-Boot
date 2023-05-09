@@ -16,7 +16,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @RestController
 public class SessionRestController {
     @Autowired
@@ -33,14 +37,31 @@ public class SessionRestController {
         repo.deleteAll();
         return ResponseEntity.ok(null);
     }
+    @GetMapping("/sessions")
+    public ResponseEntity<List<Session>> listAllConvenors(){
+        List<Session> sessions = repo.findAll();
+        if (sessions.isEmpty()) {
+            return new ResponseEntity<List<Session>>(HttpStatus.NO_CONTENT);
+
+        }else
+            return new ResponseEntity<List<Session>>(sessions,HttpStatus.OK);
+    }
+
 //    @GetMapping("/sessions/convenor/{id}/module/{code}")
-//    public ResponseEntity<?> Session_by_module_or_convenor(@PathVariable("id") long id,@PathVariable("id") String code,Convenor convenor,Module mode) {
-//
-//        if (repo.findById(id).isPresent()) {
-//            Convenor convenor = repo.findById(id).get();
-//            return new ResponseEntity<Convenor>(convenor, HttpStatus.OK);
-//        } else
+//    public ResponseEntity<?> sessionsByModuleOrConvenor(@PathVariable("id") long id, @PathVariable("code") String code) {
+//        Optional<Convenor> optionalConvenor = C_repo.findById(id);
+//        if (optionalConvenor.isPresent()) {
+//            Convenor convenor = optionalConvenor.get();
+//            Module module = new Module();
+//            List<Session> sessions = repo.findAll().stream()
+//                    .filter(session -> session.module().getCode().equals(code))
+//                    .filter(session -> session.getConvenor().getId() == id)
+//                    .collect(Collectors.toList());
+//            return new ResponseEntity<List<Session>>(sessions, HttpStatus.OK);
+//        } else {
 //            return new ResponseEntity<ErrorInfo>(new ErrorInfo("Convenor with id " + id + " not found"),
 //                    HttpStatus.NOT_FOUND);
+//        }
 //    }
+//    Endpoint 20 not completed
 }
